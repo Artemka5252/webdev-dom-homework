@@ -1,71 +1,129 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Проект "Комменты"</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
 
-  <body>
-    <div class="container">
-      <ul class="comments">
-        <li class="comment">
-          <div class="comment-header">
-            <div>Глеб Фокин</div>
-            <div>12.02.22 12:18</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Это будет первый комментарий на этой странице
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">3</span>
-              <button class="like-button"></button>
-            </div>
-          </div>
-        </li>
-        <li class="comment">
-          <div class="comment-header">
-            <div>Варвара Н.</div>
-            <div>13.02.22 19:22</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Мне нравится как оформлена эта страница! ❤
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">75</span>
-              <button class="like-button -active-like"></button>
-            </div>
-          </div>
-        </li>
-      </ul>
-      <div class="add-form">
-        <input
-          type="text"
-          class="add-form-name"
-          placeholder="Введите ваше имя"
-        />
-        <textarea
-          type="textarea"
-          class="add-form-text"
-          placeholder="Введите ваш коментарий"
-          rows="4"
-        ></textarea>
-        <div class="add-form-row">
-          <button class="add-form-button">Написать</button>
+<head>
+  <title>Проект "Комменты"</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    <ul id="comment" class="comments" value="">
+      <li class="comment">
+        <div class="comment-header">
+          <div>Глеб Фокин</div>
+          <div>12.02.22 12:18</div>
         </div>
+        <div class="comment-body">
+          <div class="comment-text">
+            Это будет первый комментарий на этой странице
+          </div>
+        </div>
+        <div class="comment-footer">
+          <div class="likes">
+            <span class="likes-counter">3</span>
+            <button class="like-button"></button>
+          </div>
+        </div>
+      </li>
+      <li class="comment">
+        <div class="comment-header">
+          <div>Варвара Н.</div>
+          <div>13.02.22 19:22</div>
+        </div>
+        <div class="comment-body">
+          <div class="comment-text">
+            Мне нравится как оформлена эта страница! ❤
+          </div>
+        </div>
+        <div class="comment-footer">
+          <div class="likes">
+            <span class="likes-counter">75</span>
+            <button class="like-button -active-like"></button>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div class="add-form">
+      <input id="name-input" type="text" class="add-form-name" placeholder="Введите ваше имя" value="" />
+      <textarea id="user-comment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий" rows="4"
+        value=""></textarea>
+      <div class="add-form-row">
+        <button id="button-comment" class="add-form-button">Написать</button>
       </div>
     </div>
-  </body>
+  </div>
+</body>
 
-  <script>
-    "use strict";
-    // Код писать здесь
-    console.log("It works!");
-  </script>
+<script>
+
+  const buttonEl = document.getElementById("button-comment");
+  const nameinputEl = document.getElementById("name-input");
+  const commentEl = document.getElementById("comment");
+  const userCommentEl = document.getElementById("user-comment");
+  const now = new Date();
+  const formattedDate = now.toLocaleString();
+
+
+  // кнопку добавил позже нижней функции, для практики.
+  const toggleButtonState = () => {
+    const isNameFilled = nameinputEl.value.trim() !== "";
+    const isCommentFilled = userCommentEl.value.trim() !== "";
+    buttonEl.disabled = !(isNameFilled && isCommentFilled);
+  };
+
+  nameinputEl.addEventListener("keyup", toggleButtonState);
+  userCommentEl.addEventListener("keyup", toggleButtonState);
+
+  nameinputEl.addEventListener("input", toggleButtonState);
+  userCommentEl.addEventListener("input", toggleButtonState);
+  toggleButtonState();
+
+  buttonEl.addEventListener('click', () => {
+    if (nameinputEl.value === "") {
+      nameinputEl.classList.add("error");
+    } else {
+      nameinputEl.classList.remove("error");
+    }
+
+    if (userCommentEl.value === "") {
+      userCommentEl.classList.add("error");
+    } else {
+      userCommentEl.classList.remove("error");
+    }
+    // сначала я сделал просто потому что захотел что то добавить отображение полей красным цветом и невозможность оставить коментарий если оба или одно поля пустые.
+    if (nameinputEl.value === "" || userCommentEl.value === "") {
+      return;
+    }
+
+    const newCommentLi = document.createElement('li');
+    newCommentLi.classList.add("comment");
+    newCommentLi.innerHTML = `
+        <div class="comment-header">
+          <div>${nameinputEl.value}</div>
+          <div>${formattedDate}</div>
+        </div>
+        <div class="comment-body">
+          <div class="comment-text">
+            ${userCommentEl.value}
+          </div>
+        </div>
+        <div class="comment-footer">
+          <div class="likes">
+            <span class="likes-counter">
+            <button class="like-button"></button>
+          </div>
+        </div>
+      `;
+
+    commentEl.appendChild(newCommentLi);
+    nameinputEl.value = "";
+    userCommentEl.value = "";
+    toggleButtonState();
+
+  });
+
+</script>
+
 </html>
