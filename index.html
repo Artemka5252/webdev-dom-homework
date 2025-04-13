@@ -97,6 +97,32 @@
       return;
     }
 
+    const newCommentLi = document.createElement('li');
+    newCommentLi.classList.add("comment");
+    newCommentLi.innerHTML = `
+        <div class="comment-header">
+          <div>${nameinputEl.value}</div>
+          <div>${formattedDate}</div>
+        </div>
+        <div class="comment-body">
+          <div class="comment-text">
+            ${userCommentEl.value}
+          </div>
+        </div>
+        <div class="comment-footer">
+          <div class="likes">
+            <span class="likes-counter">
+            <button class="like-button"></button>
+          </div>
+        </div>
+      `;
+
+    commentEl.appendChild(newCommentLi);
+    nameinputEl.value = "";
+    userCommentEl.value = "";
+    toggleButtonState();
+
+  });
 
 
 </script>
